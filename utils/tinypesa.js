@@ -1,16 +1,12 @@
 const axios = require("axios");
 
 const API_KEY = process.env.TINYPESA_API_KEY;
-console.log("API KEY:", API_KEY);
+
+console.log("Loaded API KEY:", API_KEY);
 
 async function stkPush(phone, amount) {
-    try {
 
-        const payload = {
-            amount: Number(amount),
-            msisdn: phone,
-            account_no: "BulkPay"
-        };
+    try {
 
         const response = await axios({
             method: "POST",
@@ -19,7 +15,11 @@ async function stkPush(phone, amount) {
                 "Content-Type": "application/json",
                 "ApiKey": API_KEY
             },
-            data: payload
+            data: {
+                amount: Number(amount),
+                msisdn: phone,
+                account_no: "BulkPay"
+            }
         });
 
         return response.data;
@@ -28,9 +28,7 @@ async function stkPush(phone, amount) {
 
         return {
             error: true,
-            details:
-                error.response?.data ||
-                error.message
+            details: error.response?.data || error.message
         };
     }
 }
