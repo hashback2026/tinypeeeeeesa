@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulk STK Push Bot</title>
+</head>
+<body>
+    <h2>Bulk STK Push</h2>
+
+    <form id="stkForm">
+        <textarea id="numbers" rows="5" cols="40" placeholder="2547...,2547..."></textarea><br><br>
+        <input type="number" id="amount" placeholder="Amount" /><br><br>
+        <button type="submit">Send STK Push</button>
+    </form>
+
+    <pre id="result"></pre>
+
+    <script>
+        document.getElementById("stkForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const numbers = document.getElementById("numbers").value;
+            const amount = document.getElementById("amount").value;
+
+            const res = await fetch("/api/bulk-stk", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ numbers, amount })
+            });
+
+            const data = await res.json();
+            document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+        });
+    </script>
+</body>
+</html>
