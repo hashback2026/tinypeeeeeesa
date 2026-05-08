@@ -4,27 +4,32 @@ const API_KEY = process.env.TINYPESA_API_KEY;
 
 async function stkPush(phone, amount) {
     try {
-        const response = await axios.post(
-            "https://api.tinypesa.com/api/v1/express/initialize",
-            {
-                amount: amount,
-                msisdn: phone,
-                account_no: "BulkPay"
+
+        const payload = {
+            amount: Number(amount),
+            msisdn: phone,
+            account_no: "BulkPay"
+        };
+
+        const response = await axios({
+            method: "POST",
+            url: "https://api.tinypesa.com/api/v1/express/initialize/",
+            headers: {
+                "Content-Type": "application/json",
+                "ApiKey": API_KEY
             },
-            {
-                headers: {
-                    ApiKey: API_KEY,
-                    "Content-Type": "application/json"
-                }
-            }
-        );
+            data: payload
+        });
 
         return response.data;
 
     } catch (error) {
+
         return {
             error: true,
-            details: error.response?.data || error.message
+            details:
+                error.response?.data ||
+                error.message
         };
     }
 }
