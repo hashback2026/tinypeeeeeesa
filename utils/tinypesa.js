@@ -1,12 +1,14 @@
 const axios = require("axios");
 
-const API_KEY = process.env.TINYPESA_API_KEY;
+const API_KEY = process.env.TINYPESA_LINK_API_KEY;
+const USERNAME = process.env.TINYPESA_USERNAME;
+const API_URL = process.env.TINYPESA_API_URL;
 
 async function stkPush(phone, amount, transactionCode = "BulkPay") {
 
     try {
 
-        // Normalize phone
+        // Normalize phone number
         let msisdn = phone
             .replace(/\s+/g, "")
             .replace(/[^0-9]/g, "");
@@ -19,23 +21,23 @@ async function stkPush(phone, amount, transactionCode = "BulkPay") {
 
         const payload = {
             amount: Number(amount),
-            msisdn,
+            msisdn: msisdn,
             account_no: transactionCode,
             callback_url: process.env.TINYPESA_WEBHOOK_URL
         };
 
-        console.log("Sending payload:", payload);
+        console.log("Using Username:", USERNAME);
+        console.log("API Key Loaded:", !!API_KEY);
 
         const response = await axios({
-            method: "post",
-            url: "https://api.tinypesa.com/api/v1/express/initialize/",
+            method: "POST",
+            url: `${API_URL}/express/initialize/`,
             headers: {
                 "ApiKey": API_KEY,
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            data: payload,
-            maxRedirects: 0
+            data: payload
         });
 
         return response.data;
