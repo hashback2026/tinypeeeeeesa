@@ -1,6 +1,7 @@
 const axios = require("axios");
 
 const API_KEY = process.env.TINYPESA_API_KEY;
+console.log("API KEY:", API_KEY);
 
 async function stkPush(phone, amount) {
     try {
