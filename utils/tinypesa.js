@@ -2,28 +2,30 @@ const axios = require("axios");
 
 const API_KEY = process.env.TINYPESA_API_KEY;
 
-async function stkPush(phone, amount, reference = "BulkPay", description = "Payment") {
+async function stkPush(phone, amount) {
     try {
         const response = await axios.post(
-            "https://tinypesa.com/api/v1/stkpush",
+            "https://api.tinypesa.com/api/v1/express/initialize",
             {
-                phone_number: phone,
                 amount: amount,
-                reference: reference,
-                description: description,
-                callback_url: process.env.TINYPESA_WEBHOOK_URL
+                msisdn: phone,
+                account_no: "BulkPay"
             },
             {
                 headers: {
-                    Authorization: `Bearer ${API_KEY}`,
+                    ApiKey: API_KEY,
                     "Content-Type": "application/json"
                 }
             }
         );
 
         return response.data;
+
     } catch (error) {
-        return { error: true, details: error.response?.data || error.message };
+        return {
+            error: true,
+            details: error.response?.data || error.message
+        };
     }
 }
 
